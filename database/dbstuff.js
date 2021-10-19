@@ -38,11 +38,27 @@ const findIssues = async (queryObject) => {
     return issues;
 }
 
+const updateIssue = async (id, updationObject) => {
+    const ourIssue = await Issue.findById(id);
+    for(let prop in updationObject){
+        ourIssue[prop] = updationObject[prop];
+    }
+    await ourIssue.save();    
+}
 
+const deleteIssue = async (id) => {
+    let issue = await Issue.findById(id);
+    if(!issue){
+        throw new Error('invalid _id');
+    }
+    await Issue.findByIdAndDelete(id).exec();
+}
 
 
 module.exports = {
     connect,
     newIssue,
-    findIssues
+    findIssues,
+    updateIssue,
+    deleteIssue
 }

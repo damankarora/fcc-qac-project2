@@ -107,7 +107,7 @@ module.exports = function (app) {
         return res.json({ result: 'successfully updated', '_id': ourId });
       })
       .catch((err)=>{
-        res.status(402).send("Invalid request");
+        res.json({ error: 'could not update', '_id': ourId });
       })
       
     })

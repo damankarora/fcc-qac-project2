@@ -34,8 +34,7 @@ suite('Functional Tests', function() {
                         assert.hasAllKeys(res.body, ['result', '_id']);
                     })
             })
-
-        
+ 
     });
 
     
@@ -54,6 +53,32 @@ suite('Functional Tests', function() {
             });
     });
 
+    test('Create an issue with only required field', () => {
+
+        chai.request(server)
+            .post('/api/issues/test').send({
+                issue_title: 'Test 1',
+                issue_text: 'This is a test',
+                created_by: 'Daman'
+            })
+            .end((err, res) => {
+                assert.equal(res.status, 200);
+
+
+                assert.hasAllKeys(res.body, keys);
+
+                // Deleting the user that we created.
+                chai.request(server)
+                    .delete('/api/issues/test')
+                    .send({ _id: res.body['_id'] })
+                    .end((err, res) => {
+                        assert.equal(res.status, 200);
+                        assert.hasAllKeys(res.body, ['result', '_id']);
+                    })
+            })
+
+    });
+    
     suite('View issues on a project', ()=>{
         test('GET request to /api/issues/apitest', ()=>{
             chai.request(server)
@@ -62,7 +87,7 @@ suite('Functional Tests', function() {
                 assert.equal(res.status, 200);
                 assert.isArray(res.body);
                 assert.isAtLeast(res.body.length, 1);
-            })            
+            })
         })
         test('single filter GET request to /api/issues/apitest', () => {
             chai.request(server)
@@ -122,6 +147,35 @@ suite('Functional Tests', function() {
                     assert.deepEqual(res.body, { error: 'no update field(s) sent', _id: '616e8caf3ecbf7b3ce605364'});
                 })
         });
+        test('Update an issue with missing _id', ()=>{
+            chai.request(server)
+                .put('/api/issues/apitest')
+                .send({
+                    issue_title: 'invalid title'
+                })
+                .end((err, res) => {
+                    assert.equal(res.status, 200);
+                    assert.deepEqual(res.body, { error: 'missing _id' });
+                });
+            
+        })
+
+        test('Update an issue with an invalid _id', () => {
+            chai.request(server)
+                .put('/api/issues/apitest')
+                .send({
+                    issue_title: 'invalid title',
+                    _id: 'iAmInvalid'
+                })
+                .end((err, res) => {
+                    assert.equal(res.status, 200);
+                    assert.deepEqual(res.body, { error: 'could not update', '_id': 'iAmInvalid' });
+                });
+
+        })
+        
+
+        // invalid id.
     })
 
     suite('Deleting user', ()=>{

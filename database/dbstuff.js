@@ -29,8 +29,13 @@ const Issue = mongoose.model('Issue', issueSchema);
 const newIssue = async (issueData)=>{
     const ourIssue = new Issue(issueData);
     await ourIssue.save();
-    return await findIssues({_id: ourIssue._id});
+    return await findOne(ourIssue._id);
     
+}
+
+const findOne = async (id) => {
+    const issue = await Issue.findById(id, '-project -__v');
+    return issue;
 }
 
 const findIssues = async (queryObject) => {

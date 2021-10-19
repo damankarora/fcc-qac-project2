@@ -21,6 +21,8 @@ suite('Functional Tests', function() {
             })
             .end((err, res)=>{
                 assert.equal(res.status, 200);
+                
+                
                 assert.hasAllKeys(res.body, keys);
 
                 // Deleting the user that we created.
@@ -88,7 +90,7 @@ suite('Functional Tests', function() {
             chai.request(server)
             .put('/api/issues/apitest')
             .send({
-                _id: '616e8b7bc05e041606c5515a',
+                _id: '616e8caf3ecbf7b3ce605364',
                 created_by: 'zeffy'
             })
             .end((err, res)=>{
@@ -100,7 +102,7 @@ suite('Functional Tests', function() {
             chai.request(server)
                 .put('/api/issues/apitest')
                 .send({
-                    _id: '616e8b7bc05e041606c5515a',
+                    _id: '616e8caf3ecbf7b3ce605364',
                     created_by: 'zeffy1',
                     assigned_to: 'zeffy'
                 })
@@ -113,11 +115,11 @@ suite('Functional Tests', function() {
             chai.request(server)
                 .put('/api/issues/apitest')
                 .send({
-                    _id: '616e8b7bc05e041606c5515a',                    
+                    _id: '616e8caf3ecbf7b3ce605364',
                 })
                 .end((err, res) => {
                     assert.equal(res.status, 200);
-                    assert.deepEqual(res.body, { error: 'no update field(s) sent', _id: '616e8b7bc05e041606c5515a'});
+                    assert.deepEqual(res.body, { error: 'no update field(s) sent', _id: '616e8caf3ecbf7b3ce605364'});
                 })
         });
     })
